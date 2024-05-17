@@ -1,20 +1,31 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { View } from "react-native";
+import {
+  useFonts,
+  Sora_400Regular,
+  Sora_500Medium,
+  Sora_600SemiBold,
+} from "@expo-google-fonts/sora";
+import {
+  SafeAreaProvider,
+  initialWindowMetrics,
+} from "react-native-safe-area-context";
+
+import { Products } from "@/screens/Products";
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    Sora_400Regular,
+    Sora_500Medium,
+    Sora_600SemiBold,
+  });
+
+  if (!fontsLoaded) return null;
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+      <StatusBar style="light" translucent />
+      <Products />
+    </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
