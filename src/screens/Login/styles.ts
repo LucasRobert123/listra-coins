@@ -42,6 +42,16 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 24,
   },
+  inputControl: {
+    marginBottom: 16,
+  },
+  inputError: {
+    fontSize: 14,
+    fontFamily: theme.fonts.regular,
+    color: theme.colors.primary.roxo,
+    marginTop: 4,
+    marginLeft: 4,
+  },
   action: {
     justifyContent: "center",
     alignItems: "center",

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { View } from "react-native";
+
 import {
   useFonts,
   Sora_400Regular,
@@ -10,8 +10,8 @@ import {
   SafeAreaProvider,
   initialWindowMetrics,
 } from "react-native-safe-area-context";
-
-import { Products } from "@/screens/Products";
+import { Routes } from "@/routes";
+import { View } from "react-native";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -23,9 +23,9 @@ export default function App() {
   if (!fontsLoaded) return null;
 
   return (
-    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+    <View style={{ flex: 1 }}>
       <StatusBar style="light" translucent />
-      <Products />
-    </SafeAreaProvider>
+      <Routes />
+    </View>
   );
 }

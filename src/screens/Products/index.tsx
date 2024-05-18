@@ -1,23 +1,28 @@
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ProductCard } from "@/components/ProductCard";
-import { Button } from "@/components/Button";
 
 import { styles } from "./styles";
+import { useProducts } from "@/hooks/useProducts";
+import { useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 
 export function Products() {
+  const navigation = useNavigation();
+  const { products, getProducts } = useProducts();
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.buttonGoBack}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.buttonGoBack}
+        >
           <Image
             style={styles.image}
             source={require("@/assets/icons/arrow-left.png")}
@@ -32,11 +37,12 @@ export function Products() {
         <FlatList
           contentContainerStyle={[styles.contentListProducts]}
           columnWrapperStyle={{ justifyContent: "space-between" }}
+          showsVerticalScrollIndicator={false}
           style={{ marginTop: 24 }}
-          data={[1, 2, 3, 4, 5, 6, 7, 8]}
+          data={products}
           numColumns={2}
-          renderItem={() => <ProductCard />}
-          keyExtractor={(item) => item.toString()}
+          renderItem={({ item }) => <ProductCard product={item} />}
+          keyExtractor={(item) => String(item.id)}
         />
       </View>
     </SafeAreaView>

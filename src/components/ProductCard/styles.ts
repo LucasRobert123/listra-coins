@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
+    height: 111,
   },
   content: {
     paddingVertical: 16,

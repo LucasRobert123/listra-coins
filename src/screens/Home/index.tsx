@@ -1,27 +1,51 @@
-import { Image, ScrollView, Text, View } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ProductCard } from "@/components/ProductCard";
 import { Button } from "@/components/Button";
 
 import { styles } from "./styles";
+import { useNavigation } from "@react-navigation/native";
+import { useEffect } from "react";
+import { api } from "@/libs/axios";
+import { useProducts } from "@/hooks/useProducts";
+import { useUserStore } from "@/store/user";
 
 export function Home() {
+  const { name, balance } = useUserStore((state) => {
+    const name = state.name;
+    const balance = state.balance;
+
+    return { name, balance };
+  });
+  const navigation = useNavigation();
+  const { products, getProductsFromHome } = useProducts();
+
+  useEffect(() => {
+    getProductsFromHome();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerRow}>
-          <Image
-            style={styles.userPicture}
-            source={{ uri: "https://github.com/LucasRobert123.png" }}
-          />
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={() => navigation.navigate("ProfileTab")}
+          >
+            <Image
+              style={styles.userPicture}
+              source={{ uri: "https://github.com/LucasRobert123.png" }}
+            />
+          </TouchableOpacity>
+
           <View style={styles.appNameContainer}>
             <Text style={styles.appName}>Listra Coins</Text>
           </View>
         </View>
         <View style={styles.headerRow}>
           <Text style={styles.userName}>
-            Olá, <Text style={styles.userNameBold}>Lucas</Text>
+            Olá, <Text style={styles.userNameBold}>{name}</Text>
           </Text>
           <Image source={require("@/assets/icons/notification.png")} />
         </View>
@@ -35,18 +59,23 @@ export function Home() {
               height={20}
               source={require("@/assets/icons/wallet-small.png")}
             />
+
             <Text style={styles.walletValue}>
-              Lc <Text style={styles.walletValueBold}>5.000.000</Text>
+              Lc <Text style={styles.walletValueBold}>{balance}</Text>
             </Text>
           </View>
-          <View style={styles.wrapperShop}>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            style={styles.wrapperShop}
+            onPress={() => navigation.navigate("ProductsTab")}
+          >
             <Image
               width={24}
               height={20}
               source={require("@/assets/icons/shopping-bag.png")}
             />
             <Text style={styles.shopText}>Shop</Text>
-          </View>
+          </TouchableOpacity>
         </View>
 
         <ScrollView
@@ -88,12 +117,16 @@ export function Home() {
         </ScrollView>
 
         <View style={styles.products}>
-          <ProductCard />
-          <ProductCard />
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
         </View>
 
         <View style={styles.footer}>
-          <Button text="Ver todos os produtos" />
+          <Button
+            text="Ver todos os produtos"
+            onPress={() => navigation.navigate("ProductsTab")}
+          />
         </View>
       </View>
     </SafeAreaView>
