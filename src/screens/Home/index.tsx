@@ -1,16 +1,18 @@
+import { useEffect } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import notifee, { AndroidImportance } from "@notifee/react-native";
 
 import { ProductCard } from "@/components/ProductCard";
 import { Button } from "@/components/Button";
 
-import { styles } from "./styles";
-import { useNavigation } from "@react-navigation/native";
-import { useEffect } from "react";
-import { api } from "@/libs/axios";
-import { useProducts } from "@/hooks/useProducts";
 import { useUserStore } from "@/store/user";
+
+import { useProducts } from "@/hooks/useProducts";
 import { useNotifications } from "@/hooks/useNotifications";
+
+import { styles } from "./styles";
 
 export function Home() {
   const { name, balance } = useUserStore((state) => {
@@ -28,8 +30,26 @@ export function Home() {
     getProductsFromHome();
   }, []);
 
+  useEffect(() => {
+    notifee.requestPermission();
+  }, []);
+
   async function handleOnBuy(productId: number) {
     const notification = await fetchNotificationByProductId(productId);
+
+    const channelId = await notifee.createChannel({
+      id: String(notification.id),
+      name: "buy-product",
+      importance: AndroidImportance.HIGH,
+    });
+
+    await notifee.displayNotification({
+      title: `Olá, ${name}`,
+      body: notification.message,
+      android: {
+        channelId,
+      },
+    });
   }
 
   return (
