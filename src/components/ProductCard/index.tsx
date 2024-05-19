@@ -1,12 +1,44 @@
-import { Image, Text, TouchableOpacity, View, ViewProps } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewProps,
+} from "react-native";
 import { styles } from "./styles";
 import { IProduct } from "@/entities/product";
+import { theme } from "@/styles/theme";
+import { useCallback } from "react";
+
+type ChildrenButtonProps = {
+  [key in StateProductCard]: React.JSX.Element;
+};
+
+type StateProductCard = "add-cart" | "loading" | "on-my-way";
 
 type Props = Pick<ViewProps, "style"> & {
   product: IProduct;
+  state?: StateProductCard;
+  onBuy?: (productId: number) => void;
 };
 
-export const ProductCard = ({ style, product }: Props) => {
+export const ProductCard = ({
+  style,
+  state = "add-cart",
+  product,
+  onBuy,
+}: Props) => {
+  const childrenButton: ChildrenButtonProps = {
+    "add-cart": <Image source={require("@/assets/icons/shopping-cart.png")} />,
+    loading: <ActivityIndicator size={20} color={theme.colors.neutral.white} />,
+    "on-my-way": <Image source={require("@/assets/icons/check-circle.png")} />,
+  };
+
+  const handleOnBuy = useCallback(() => {
+    onBuy?.(product.id);
+  }, [onBuy, product.id]);
+
   return (
     <View style={[styles.container, style]}>
       <Image
@@ -26,8 +58,12 @@ export const ProductCard = ({ style, product }: Props) => {
             Lc {"\n"}
             <Text style={styles.priceBold}>{product.price}</Text>
           </Text>
-          <TouchableOpacity activeOpacity={0.6} style={styles.button}>
-            <Image source={require("@/assets/icons/shopping-cart.png")} />
+          <TouchableOpacity
+            activeOpacity={0.6}
+            style={styles.button}
+            onPress={handleOnBuy}
+          >
+            {childrenButton[state]}
           </TouchableOpacity>
         </View>
       </View>

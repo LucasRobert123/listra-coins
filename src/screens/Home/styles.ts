@@ -94,7 +94,6 @@ export const styles = StyleSheet.create({
   },
   listVacationPackage: {
     marginTop: 40,
-    maxHeight: 110,
   },
   contentListVacationPackage: {
     alignSelf: "flex-start",
@@ -137,7 +136,6 @@ export const styles = StyleSheet.create({
   products: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 40,
   },
   footer: {
     justifyContent: "center",

@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { api } from "@/libs/axios";
 import { useProducts } from "@/hooks/useProducts";
 import { useUserStore } from "@/store/user";
+import { useNotifications } from "@/hooks/useNotifications";
 
 export function Home() {
   const { name, balance } = useUserStore((state) => {
@@ -19,11 +20,17 @@ export function Home() {
     return { name, balance };
   });
   const navigation = useNavigation();
+
   const { products, getProductsFromHome } = useProducts();
+  const { fetchNotificationByProductId } = useNotifications();
 
   useEffect(() => {
     getProductsFromHome();
   }, []);
+
+  async function handleOnBuy(productId: number) {
+    const notification = await fetchNotificationByProductId(productId);
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -118,7 +125,11 @@ export function Home() {
 
         <View style={styles.products}>
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              onBuy={handleOnBuy}
+            />
           ))}
         </View>
 
