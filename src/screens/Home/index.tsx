@@ -23,7 +23,7 @@ export function Home() {
   });
   const navigation = useNavigation();
 
-  const { products, getProductsFromHome } = useProducts();
+  const { products, getProductsFromHome, updateProduct } = useProducts();
   const { fetchNotificationByProductId } = useNotifications();
 
   useEffect(() => {
@@ -35,6 +35,8 @@ export function Home() {
   }, []);
 
   async function handleOnBuy(productId: number) {
+    updateProduct(productId, { state: "loading" });
+
     const notification = await fetchNotificationByProductId(productId);
 
     const channelId = await notifee.createChannel({
@@ -50,6 +52,8 @@ export function Home() {
         channelId,
       },
     });
+
+    updateProduct(productId, { state: "on-my-way" });
   }
 
   return (

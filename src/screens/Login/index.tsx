@@ -38,7 +38,6 @@ export function Login() {
   async function handleLogin(user: FormData) {
     try {
       await login(user);
-      navigation.navigate("Home");
     } catch {
       Alert.alert("Erro ao logar", "Credenciais não batem!");
     }

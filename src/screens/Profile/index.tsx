@@ -3,12 +3,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { styles } from "./styles";
 import { Button } from "@/components/Button";
-import { useNavigation } from "@react-navigation/native";
+
 import { useUserStore } from "@/store/user";
+import { useAuth } from "@/hooks/useAuth";
 
 export function Profile() {
   const name = useUserStore((state) => state.name);
-  const navigation = useNavigation();
+  const { signOut } = useAuth();
+
+  function handleSignOut() {
+    signOut();
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -49,7 +54,7 @@ export function Profile() {
           <Button
             style={{ paddingHorizontal: 8 }}
             text="Sair"
-            onPress={() => navigation.navigate("Login")}
+            onPress={handleSignOut}
           />
         </View>
       </View>

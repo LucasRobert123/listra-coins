@@ -4,6 +4,7 @@ import { useUserStore } from "@/store/user";
 
 export function useAuth() {
   const setUser = useUserStore((state) => state.setUser);
+  const resetUser = useUserStore((state) => state.resetUser);
 
   async function login(user: UserAuth) {
     const response = await api.get<IUser[]>(
@@ -14,6 +15,9 @@ export function useAuth() {
 
     setUser(response.data[0]);
   }
+  function signOut() {
+    resetUser();
+  }
 
-  return { login };
+  return { login, signOut };
 }

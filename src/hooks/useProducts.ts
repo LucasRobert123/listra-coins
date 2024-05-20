@@ -1,6 +1,7 @@
+import { useState } from "react";
+import { produce } from "immer";
 import { IProduct } from "@/entities/product";
 import { api } from "@/libs/axios";
-import { useState } from "react";
 
 export function useProducts() {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -15,5 +16,17 @@ export function useProducts() {
     setProducts(response.data);
   }
 
-  return { products, getProductsFromHome, getProducts };
+  function updateProduct(productId: number, product: Partial<IProduct>) {
+    setProducts(
+      produce((draft) => {
+        let currentProduct = draft.find((p) => p.id === productId);
+
+        if (currentProduct) {
+          Object.assign(currentProduct, product);
+        }
+      })
+    );
+  }
+
+  return { products, getProductsFromHome, getProducts, updateProduct };
 }

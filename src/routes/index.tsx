@@ -1,11 +1,15 @@
 import { NavigationContainer } from "@react-navigation/native";
 
-import { StackNavigator } from "./stack.routes";
+import { StackRoutes } from "./stack.routes";
+import { useUserStore } from "@/store/user";
+import { AuthRoutes } from "./auth.routes";
 
 export function Routes() {
+  const userName = useUserStore((state) => state.name);
+
   return (
     <NavigationContainer>
-      <StackNavigator />
+      {userName ? <StackRoutes /> : <AuthRoutes />}
     </NavigationContainer>
   );
 }

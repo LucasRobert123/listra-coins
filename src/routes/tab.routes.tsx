@@ -7,7 +7,7 @@ import { Image } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
-export function TabNavigator() {
+export function TabRoutes() {
   return (
     <Tab.Navigator
       screenOptions={{

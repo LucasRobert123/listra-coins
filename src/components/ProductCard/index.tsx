@@ -15,20 +15,15 @@ type ChildrenButtonProps = {
   [key in StateProductCard]: React.JSX.Element;
 };
 
-type StateProductCard = "add-cart" | "loading" | "on-my-way";
+export type StateProductCard = "add-cart" | "loading" | "on-my-way";
 
 type Props = Pick<ViewProps, "style"> & {
   product: IProduct;
-  state?: StateProductCard;
+
   onBuy?: (productId: number) => void;
 };
 
-export const ProductCard = ({
-  style,
-  state = "add-cart",
-  product,
-  onBuy,
-}: Props) => {
+export const ProductCard = ({ style, product, onBuy }: Props) => {
   const childrenButton: ChildrenButtonProps = {
     "add-cart": <Image source={require("@/assets/icons/shopping-cart.png")} />,
     loading: <ActivityIndicator size={20} color={theme.colors.neutral.white} />,
@@ -63,7 +58,7 @@ export const ProductCard = ({
             style={styles.button}
             onPress={handleOnBuy}
           >
-            {childrenButton[state]}
+            {childrenButton[product.state]}
           </TouchableOpacity>
         </View>
       </View>
