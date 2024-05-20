@@ -1,5 +1,8 @@
-import { IUser } from "@/entities/user";
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { IUser } from "@/entities/user";
 
 const initialState = {
   id: undefined,
@@ -14,12 +17,17 @@ export type UserStore = Partial<IUser> & {
   resetUser: () => void;
 };
 
-export const useUserStore = create<UserStore>((set) => ({
-  ...initialState,
-  setUser: (user: IUser) => {
-    set((state) => ({ ...state, ...user }));
-  },
-  resetUser: () => {
-    set((state) => ({ ...state, ...initialState }));
-  },
-}));
+export const useUserStore = create(
+  persist<UserStore>(
+    (set) => ({
+      ...initialState,
+      setUser: (user: IUser) => {
+        set((state) => ({ ...state, ...user }));
+      },
+      resetUser: () => {
+        set((state) => ({ ...state, ...initialState }));
+      },
+    }),
+    { name: "user-storage", storage: createJSONStorage(() => AsyncStorage) }
+  )
+);
