@@ -5,15 +5,20 @@ import { api } from "@/libs/axios";
 
 export function useProducts() {
   const [products, setProducts] = useState<IProduct[]>([]);
+  const [loading, setLoading] = useState(false);
 
   async function getProductsFromHome() {
+    setLoading(true);
     const response = await api.get<IProduct[]>("/products?_start=0&_end=2");
+    setLoading(false);
     setProducts(response.data);
     return response.data;
   }
 
   async function getProducts() {
+    setLoading(true);
     const response = await api.get<IProduct[]>("/products");
+    setLoading(false);
     setProducts(response.data);
     return response.data;
   }
@@ -30,5 +35,5 @@ export function useProducts() {
     );
   }
 
-  return { products, getProductsFromHome, getProducts, updateProduct };
+  return { products, loading, getProductsFromHome, getProducts, updateProduct };
 }

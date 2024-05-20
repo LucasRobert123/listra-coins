@@ -1,5 +1,12 @@
 import { useEffect } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import notifee, { AndroidImportance } from "@notifee/react-native";
@@ -13,6 +20,8 @@ import { useProducts } from "@/hooks/useProducts";
 import { useNotifications } from "@/hooks/useNotifications";
 
 import { styles } from "./styles";
+import { Center } from "@/components/Center";
+import { theme } from "@/styles/theme";
 
 export function Home() {
   const { name, balance } = useUserStore((state) => {
@@ -23,7 +32,8 @@ export function Home() {
   });
   const navigation = useNavigation();
 
-  const { products, getProductsFromHome, updateProduct } = useProducts();
+  const { products, getProductsFromHome, updateProduct, loading } =
+    useProducts();
   const { fetchNotificationByProductId } = useNotifications();
 
   useEffect(() => {
@@ -147,15 +157,21 @@ export function Home() {
           </View>
         </ScrollView>
 
-        <View style={styles.products}>
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onBuy={handleOnBuy}
-            />
-          ))}
-        </View>
+        {loading ? (
+          <Center>
+            <ActivityIndicator size={24} color={theme.colors.primary.roxo} />
+          </Center>
+        ) : (
+          <View style={styles.products}>
+            {products.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onBuy={handleOnBuy}
+              />
+            ))}
+          </View>
+        )}
 
         <View style={styles.footer}>
           <Button

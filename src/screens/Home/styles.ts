@@ -94,6 +94,7 @@ export const styles = StyleSheet.create({
   },
   listVacationPackage: {
     marginTop: 40,
+    maxHeight: 130,
   },
   contentListVacationPackage: {
     alignSelf: "flex-start",

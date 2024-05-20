@@ -1,5 +1,4 @@
 import { Text, View, Image, Alert } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -9,6 +8,7 @@ import { Button } from "@/components/Button";
 
 import { styles } from "./styles";
 import { useAuth } from "@/hooks/useAuth";
+import { useState } from "react";
 
 const schema = yup
   .object({
@@ -20,9 +20,7 @@ const schema = yup
 type FormData = yup.InferType<typeof schema>;
 
 export function Login() {
-  const navigation = useNavigation();
   const { login } = useAuth();
-
   const {
     control,
     handleSubmit,
@@ -35,11 +33,16 @@ export function Login() {
     },
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   async function handleLogin(user: FormData) {
     try {
+      setIsLoading(true);
       await login(user);
     } catch {
       Alert.alert("Erro ao logar", "Credenciais não batem!");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -96,7 +99,12 @@ export function Login() {
         </View>
 
         <View style={styles.action}>
-          <Button text="Entrar" onPress={handleSubmit(handleLogin)} />
+          <Button
+            isLoading={isLoading}
+            text="Entrar"
+            onPress={handleSubmit(handleLogin)}
+            style={{ width: 120, height: 44 }}
+          />
         </View>
 
         <View style={styles.footer}>

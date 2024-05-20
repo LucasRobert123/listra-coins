@@ -1,4 +1,11 @@
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ProductCard } from "@/components/ProductCard";
@@ -7,10 +14,12 @@ import { styles } from "./styles";
 import { useProducts } from "@/hooks/useProducts";
 import { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { Center } from "@/components/Center";
+import { theme } from "@/styles/theme";
 
 export function Products() {
   const navigation = useNavigation();
-  const { products, getProducts } = useProducts();
+  const { products, getProducts, loading } = useProducts();
 
   useEffect(() => {
     getProducts();
@@ -34,16 +43,22 @@ export function Products() {
       <View style={styles.content}>
         <Text style={styles.title}>Shop</Text>
 
-        <FlatList
-          contentContainerStyle={[styles.contentListProducts]}
-          columnWrapperStyle={{ justifyContent: "space-between" }}
-          showsVerticalScrollIndicator={false}
-          style={{ marginTop: 24 }}
-          data={products}
-          numColumns={2}
-          renderItem={({ item }) => <ProductCard product={item} />}
-          keyExtractor={(item) => String(item.id)}
-        />
+        {loading ? (
+          <Center>
+            <ActivityIndicator size={24} color={theme.colors.primary.roxo} />
+          </Center>
+        ) : (
+          <FlatList
+            contentContainerStyle={[styles.contentListProducts]}
+            columnWrapperStyle={{ justifyContent: "space-between" }}
+            showsVerticalScrollIndicator={false}
+            style={{ marginTop: 24 }}
+            data={products}
+            numColumns={2}
+            renderItem={({ item }) => <ProductCard product={item} />}
+            keyExtractor={(item) => String(item.id)}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
