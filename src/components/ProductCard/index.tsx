@@ -19,7 +19,6 @@ export type StateProductCard = "add-cart" | "loading" | "on-my-way";
 
 type Props = Pick<ViewProps, "style"> & {
   product: IProduct;
-
   onBuy?: (productId: number) => void;
 };
 

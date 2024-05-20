@@ -14,6 +14,8 @@ export function useAuth() {
     if (response.data.length === 0) throw new Error("User not found");
 
     setUser(response.data[0]);
+
+    return response.data;
   }
   function signOut() {
     resetUser();

@@ -6,10 +6,7 @@ import {
   Sora_500Medium,
   Sora_600SemiBold,
 } from "@expo-google-fonts/sora";
-import {
-  SafeAreaProvider,
-  initialWindowMetrics,
-} from "react-native-safe-area-context";
+
 import { Routes } from "@/routes";
 import { View } from "react-native";
 

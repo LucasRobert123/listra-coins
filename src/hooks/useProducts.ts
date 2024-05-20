@@ -9,11 +9,13 @@ export function useProducts() {
   async function getProductsFromHome() {
     const response = await api.get<IProduct[]>("/products?_start=0&_end=2");
     setProducts(response.data);
+    return response.data;
   }
 
   async function getProducts() {
     const response = await api.get<IProduct[]>("/products");
     setProducts(response.data);
+    return response.data;
   }
 
   function updateProduct(productId: number, product: Partial<IProduct>) {
